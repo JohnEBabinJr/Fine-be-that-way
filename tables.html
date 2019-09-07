@@ -6,9 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Bubble University</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 <body>
@@ -24,8 +26,8 @@
                     </h5>
 
                     <hr class="my-4">
-                    <a class="btn btn-primary btn-lg" href="#" role="button"> Home</a>
-                    <a class="btn btn-primary btn-lg mr-4" href="#" role="button"> Make a Reservation</a>
+                    <a class="btn btn-primary btn-lg" href="/" role="button"> Home</a>
+                    <a class="btn btn-primary btn-lg mr-4" href="/reservations" role="button"> Make a Reservation</a>
 
 
                 </div>
@@ -33,36 +35,78 @@
 
             <div class="col-3">
                 <h3>Current Reservation</h3>
-                <ul class="list-group">
-                    <li class="list-group-item">Cras justo odio</li>
-                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                    <li class="list-group-item">Morbi leo risus</li>
-                    <li class="list-group-item">Porta ac consectetur ac</li>
-                    <li class="list-group-item">Vestibulum at eros</li>
+                <ul class="list-group" id="tables">
 
                 </ul>
+
             </div>
 
             <div class="col-5">
                 <h3>Waiting List</h3>
-                <ul class="list-group">
-                    <li class="list-group-item">Cras justo odio</li>
-                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                    <li class="list-group-item">Morbi leo risus</li>
-                    <li class="list-group-item">Porta ac consectetur ac</li>
-                    <li class="list-group-item">Vestibulum at eros</li>
-                    <a class="btn btn-primary btn-lg" href="#" role="button">Add to Waitlist</a>
+                <ul class="list-group" id="waitlist">
 
                 </ul>
             </div>
         </div>
 
         <hr class="my-4">
-        <a class="" href="#">API Table Link</a> |
-        <a class="" href="#">API Waitlist</a>
+        <a class="" href="/api/tables">API Table Link</a> |
+        <a class="" href="/api/reservations">API Waitlist</a>
 
         <a class="btn btn-danger btn-sm" href="#" role="button">Clear Tables</a>
-
+        <div id="counter"></div>
 </body>
+<script>
+    $.ajax({
+        url: "/api/reservations",
+        method: "GET",
+    }).then(function (Data) {
+        console.log(Data[0]);
+        for (var i = 0; i < 5; i++) {
+            var tableslist = $("#tables");
+            var seated = $("<li class ='list-group-item'>");
+            seated.append(
+                $("<h6>").text("Table #" + (i + 1)),
+                $("<hr>"),
+                $("<h5>").text("Name: " + Data[i].name),
+                $("<h6>").text("Phone: " + Data[i].phone),
+                $("<h6>").text("Email: " + Data[i].email),
+                $("<h6>").text("Name: " + Data[i].bubblepoints),
+            );
+            tableslist.append(seated);
+        }
+    });
+
+    $.ajax({
+        url: "/api/reservations",
+        method: "GET",
+    }).then(function (Data) {
+        for (var i = 5; i < Data.length; i++) {
+            var tableslist = $("#waitlist");
+            var seated = $("<li class ='list-group-item'>");
+
+            seated.append(
+                $("<h6>").text("Table #" + (i + 1)),
+                $("<hr>"),
+                $("<h5>").text("Name: " + Data[i].name),
+                $("<h6>").text("Phone: " + Data[i].phone),
+                $("<h6>").text("Email: " + Data[i].email),
+                $("<h6>").text("Name: " + Data[i].bubblepoints),
+            );
+            tableslist.append(seated);
+        }
+    });
+    var n = localStorage.getItem('on_load_counter');
+
+    if (n === null) {
+        n = 0;
+    }
+
+    n++;
+
+    localStorage.setItem("on_load_counter", n);
+
+    document.getElementById('counter').innerHTML = n;
+</script>
 
 </html>
