@@ -10,4 +10,4 @@
 
 - Create a set of routes for displaying the HTML pages
 
-- Use jQuery to run AJAX calls to GET and POST data from users to the Express server
+- Use jQuery and express to run AJAX calls to GET and POST data from users to the Express server
